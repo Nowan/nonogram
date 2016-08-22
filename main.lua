@@ -12,7 +12,8 @@ local data =  { 0,1,1,1,0,
 -- convert data from one-dimensional array to two-dimensional matrix
 local matrix = {};
 matrix.size = math.sqrt(#data);
-for i=1,#data do
+local i=1;
+while i<=#data do
 	local row = math.ceil(i/matrix.size);
 	matrix[row] = {};
 	for column=1,matrix.size do
