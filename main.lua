@@ -30,17 +30,17 @@ for r=1,matrix.size do
 	print(stringLine)
 end
 
--- array of nonogram row hints
+-- array of nonogram row and column hints
 local rHints = {};
+local cHints = {};
 
-
+-- get row hints
 for r=1,matrix.size do
 	local rowHints = {}; -- row hints only for current row
 	-- loop through columns in search of shaded segments
 
 	local c=1;
-	-- WHILE loop allows to change iteration value inside of the loop (and FOR doesn't)
-	while c<=matrix.size do
+	while c<=matrix.size do -- WHILE loop allows to change iteration value inside of the loop (and FOR doesn't)
 		local segment = matrix[r][c];
 		if segment==1 then
 			-- if segment is shaded - add new row hint with value 1
@@ -65,3 +65,51 @@ for r=1,matrix.size do
 	rHints[r] = rowHints;
 end
 
+-- get column hints - the same way as row hints
+for c=1,matrix.size do
+	local columnHints = {}; 
+
+	local r=1;
+	while r<=matrix.size do 
+		local segment = matrix[r][c];
+		if segment==1 then
+			columnHints[#columnHints+1] = 1;
+
+			r = r + 1;
+			local nextSegment = matrix[r][c];
+			while nextSegment==1 do
+				columnHints[#columnHints] = columnHints[#columnHints] + 1;
+
+				r = r + 1;
+				if( r>matrix.size ) then 
+					nextSegment=nil
+				else
+					nextSegment = matrix[r][c];
+				end
+			end
+		else
+			r = r+1;
+		end
+
+	end
+	cHints[c] = columnHints;
+end
+
+-- print result
+local stringLine = "";
+for r=1,#rHints do
+	for h=1,#rHints[r] do
+		stringLine = stringLine..rHints[r][h].." ";
+	end
+	stringLine = stringLine.."| ";
+end
+print("Row hints: "..stringLine)
+
+stringLine = "";
+for c=1,#cHints do
+	for h=1,#cHints[c] do
+		stringLine = stringLine..cHints[c][h].." ";
+	end
+	stringLine = stringLine.."| ";
+end
+print("Column hints: "..stringLine)
